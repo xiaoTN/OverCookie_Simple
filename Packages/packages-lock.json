@@ -173,6 +173,12 @@
       "source": "embedded",
       "dependencies": {}
     },
+    "tn.odin": {
+      "version": "file:tn.odin",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
     "tn.unirx": {
       "version": "file:tn.unirx",
       "depth": 0,
