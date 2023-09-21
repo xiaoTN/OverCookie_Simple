@@ -11,9 +11,9 @@ namespace TN.Info
     public class MenuInfo
     {
         /// <summary>
-        /// 成品食物Id
+        /// 食物Id
         /// </summary>
-        public string TargetId;
+        public ObjType TargetId;
         /// <summary>
         /// 所需的原材料信息
         /// </summary>
@@ -31,7 +31,7 @@ namespace TN.Info
     [Serializable]
     public class SourceMaterialInfo
     {
-        public string Id;
-        public int Count;
+        public ObjType Id;
+        public int      Count;
     }
 }

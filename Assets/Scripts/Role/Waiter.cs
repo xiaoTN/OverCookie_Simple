@@ -1,17 +1,18 @@
 using System;
+using TN.Info;
+using UnityEngine;
 
 namespace TN.Role
 {
     /// <summary>
     /// 服务员
-    /// </summary>、
-    [Serializable]
-    public class Waiter
+    /// </summary>
+    public class Waiter: MonoBehaviour
     {
         /// <summary>
         /// 携带物品的Id
         /// </summary>
-        public string TakeObjId;
+        public ObjType TakeObjId;
         /// <summary>
         /// 携带物品的数量
         /// </summary>

@@ -29,6 +29,7 @@ namespace TN.Common
                 return;
             }
 
+            path = Path.Combine(Application.streamingAssetsPath, path);
             if (File.Exists(path) == false)
             {
                 string directoryName = Path.GetDirectoryName(path);

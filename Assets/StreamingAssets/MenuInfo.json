@@ -1,0 +1,31 @@
+[
+  {
+    "TargetId": "Scone",
+    "SourceMaterialInfos": null,
+    "Duration": -1.0
+  },
+  {
+    "TargetId": "Beaf",
+    "SourceMaterialInfos": [
+      {
+        "Id": "OriginBeaf",
+        "Count": 1
+      }
+    ],
+    "Duration": 3.0
+  },
+  {
+    "TargetId": "Noodle",
+    "SourceMaterialInfos": [
+      {
+        "Id": "Beaf",
+        "Count": 1
+      },
+      {
+        "Id": "Noodle",
+        "Count": 1
+      }
+    ],
+    "Duration": 10.0
+  }
+]
