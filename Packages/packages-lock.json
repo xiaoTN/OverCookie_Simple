@@ -155,6 +155,36 @@
       },
       "url": "https://packages.unity.cn"
     },
+    "tn.consolepro": {
+      "version": "file:tn.consolepro",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
+    "tn.dotween": {
+      "version": "file:tn.dotween",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
+    "tn.fsm": {
+      "version": "file:tn.fsm",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
+    "tn.unirx": {
+      "version": "file:tn.unirx",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
+    "tn.unitask": {
+      "version": "file:tn.unitask",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {}
+    },
     "com.unity.modules.ai": {
       "version": "1.0.0",
       "depth": 0,
