@@ -1,5 +1,7 @@
+using System;
 using Sirenix.OdinInspector;
 using TN.Info;
+using UniRx;
 using UnityEngine;
 
 namespace TN.Building
@@ -18,22 +20,55 @@ namespace TN.Building
         [ReadOnly]
         public int RemainFireWood;
 
-        [Button]
-        public void Cooking()
-        {
-        }
-
-        [Button]
-        public void StopCooking()
-        {
-        }
 
         protected override string GizmoLabel
         {
-            get
-            {
-                return $@"灶台";
-            }
+            get { return $@"【灶台】
+柴火数：{RemainFireWood}
+正在烹饪的食物：{CookingFoodId.ToString()}"; }
+        }
+
+        private ReactiveProperty<int> _usingCount = new ReactiveProperty<int>();
+
+        private void Start()
+        {
+            CompositeDisposable cookDis = null;
+            _usingCount.Select(i => i > 0)
+                       .ToReactiveProperty()
+                       .Subscribe(isUsing =>
+                       {
+                           if (isUsing)
+                           {
+                               cookDis = new CompositeDisposable();
+                               Observable.Interval(TimeSpan.FromSeconds(1))
+                                         .Subscribe(l =>
+                                         {
+                                             RemainFireWood--;
+                                         })
+                                         .AddTo(this)
+                                         .AddTo(cookDis);
+                           }
+                           else
+                           {
+                               cookDis?.Dispose();
+                           }
+                       })
+                       .AddTo(this);
+        }
+
+        public void StartCook()
+        {
+            _usingCount.Value++;
+        }
+
+        public void StopCook()
+        {
+            _usingCount.Value--;
+        }
+
+        public void AddFireWood(int count)
+        {
+            RemainFireWood += count;
         }
     }
 }

@@ -1,3 +1,4 @@
+using TN.Info;
 using UnityEngine;
 
 namespace TN.Building
@@ -13,8 +14,23 @@ namespace TN.Building
         {
             get
             {
-                return "柴火箱";
+                return $@"【柴火箱】
+数量：{MaxCount}";
             }
+        }
+
+        public int Pick()
+        {
+            ObjInfo fireWood = GameManager.Instance.ObjInfos.Find(info => info.Id== ObjType.FireWood);
+            if (MaxCount > fireWood.MaxCountPerGrid)
+            {
+                MaxCount -= fireWood.MaxCountPerGrid;
+                return fireWood.MaxCountPerGrid;
+            }
+
+            int copyCount = MaxCount;
+            MaxCount = 0;
+            return copyCount;
         }
     }
 }

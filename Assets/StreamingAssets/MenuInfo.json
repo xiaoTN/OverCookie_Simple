@@ -18,7 +18,7 @@
     "TargetId": "Noodle",
     "SourceMaterialInfos": [
       {
-        "Id": "Beaf",
+        "Id": "OriginBeaf",
         "Count": 1
       },
       {

@@ -11,44 +11,11 @@ namespace TN.Info
     {
         [ShowInInspector]
         [NonSerialized]
+        [TableList]
+        [InlineButton(nameof(SaveMenuInfo))]
         public List<MenuInfo> MenuInfos;
 
-        /// <summary>
-        /// 订单队列
-        /// </summary>
-        [ShowInInspector]
-        [NonSerialized]
-        public Queue<MenuInfo> OrderFormMenuQueue = new Queue<MenuInfo>();
-
-        public MenuInfo CurFirstMenu
-        {
-            get
-            {
-                if (OrderFormMenuQueue.Count > 0)
-                    return OrderFormMenuQueue.Peek();
-                return null;
-            }
-        }
-
-        public DiningTable       DiningTable;
-        public FoodAllot         FoodAllot;
-        public FoodContainer     FoodContainer;
-        public FireWoodContainer FireWoodContainer;
-        public CookingBench      CookingBench;
-
-
-        protected override void SetUp()
-        {
-            base.SetUp();
-            MenuInfos = JsonUtils.ReadJsonFromStreamingAssets<List<MenuInfo>>("MenuInfo.json");
-            FoodContainer = FindObjectOfType<FoodContainer>();
-            DiningTable = FindObjectOfType<DiningTable>();
-            FoodAllot = FindObjectOfType<FoodAllot>();
-            CookingBench = FindObjectOfType<CookingBench>();
-        }
-
-        [Button]
-        private void Save()
+        private void SaveMenuInfo()
         {
             List<MenuInfo> menuInfos = new List<MenuInfo>()
             {
@@ -91,6 +58,87 @@ namespace TN.Info
                 }
             };
             JsonUtils.WriteJson(menuInfos, "MenuInfo.json");
+        }
+
+        /// <summary>
+        /// 订单队列
+        /// </summary>
+        [ShowInInspector]
+        [NonSerialized]
+        public Queue<MenuInfo> OrderFormMenuQueue = new Queue<MenuInfo>();
+
+        public MenuInfo CurFirstMenu
+        {
+            get
+            {
+                if (OrderFormMenuQueue.Count > 0)
+                    return OrderFormMenuQueue.Peek();
+                return null;
+            }
+        }
+
+        [ShowInInspector]
+        [NonSerialized]
+        [TableList]
+        [InlineButton(nameof(SaveObjInfo))]
+        public List<ObjInfo> ObjInfos;
+
+        private void SaveObjInfo()
+        {
+            List<ObjInfo> infos = new List<ObjInfo>()
+            {
+                new ObjInfo()
+                {
+                    Id = ObjType.Beaf,
+                    Name = "熟牛排",
+                    MaxCountPerGrid = 1
+                },
+                new ObjInfo()
+                {
+                    Id = ObjType.OriginBeaf,
+                    Name = "生牛排",
+                    MaxCountPerGrid = 1
+                },
+                new ObjInfo()
+                {
+                    Id = ObjType.Noodle,
+                    Name = "意大利牛排套餐",
+                    MaxCountPerGrid = 1
+                },
+                new ObjInfo()
+                {
+                    Id = ObjType.Scone,
+                    Name = "曲奇",
+                    MaxCountPerGrid = 1
+                },
+                new ObjInfo()
+                {
+                    Id = ObjType.FireWood,
+                    Name = "柴火",
+                    MaxCountPerGrid = 50
+                },
+            };
+            JsonUtils.WriteJson(infos, "ObjInfo.json");
+        }
+        
+
+        public DiningTable       DiningTable;
+        public FoodAllot         FoodAllot;
+        public FoodContainer     FoodContainer;
+        public FireWoodContainer FireWoodContainer;
+        public CookingBench      CookingBench;
+
+
+        protected override void SetUp()
+        {
+            base.SetUp();
+            MenuInfos = JsonUtils.ReadJsonFromStreamingAssets<List<MenuInfo>>("MenuInfo.json");
+            ObjInfos = JsonUtils.ReadJsonFromStreamingAssets<List<ObjInfo>>("ObjInfo.json");
+            FoodContainer = FindObjectOfType<FoodContainer>();
+            DiningTable = FindObjectOfType<DiningTable>();
+            FoodAllot = FindObjectOfType<FoodAllot>();
+            CookingBench = FindObjectOfType<CookingBench>();
+            FireWoodContainer = FindObjectOfType<FireWoodContainer>();
         }
     }
 }

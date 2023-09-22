@@ -19,9 +19,10 @@ namespace TN.Role
     {
         /// <summary>
         /// 当前携带的物体Id
+        /// todo 这种结构不支持序列化
         /// </summary>
         [ReadOnly]
-        public List<ObjType> TakeObjIds;
+        public List<(ObjType, int)> TakeObjIds = new List<(ObjType, int)>();
 
         /// <summary>
         /// 最大携带单位
@@ -34,7 +35,7 @@ namespace TN.Role
         /// 携带物品
         /// </summary>
         /// <param name="objType"></param>
-        private bool TakeObj(ObjType objType)
+        private bool TakeObj(ObjType objType, int count)
         {
             if (TakeObjIds.Count > MaxTakeCount)
             {
@@ -42,7 +43,7 @@ namespace TN.Role
                 return false;
             }
 
-            TakeObjIds.Add(objType);
+            TakeObjIds.Add((objType, count));
             return true;
         }
 
@@ -112,6 +113,18 @@ namespace TN.Role
                 _curState = state;
                 Debug.Log($"进入状态：{state}");
             };
+
+            gameObject.UpdateAsObservable()
+                      .Select(unit => GameManager.Instance.CookingBench.RemainFireWood == 0)
+                      .ToReactiveProperty()
+                      .Subscribe(isZero =>
+                      {
+                          if (isZero)
+                          {
+                              Debug.Log("灶台中柴火耗尽，需要添加柴火");
+                              _fsm.ChangeState(CookState.RunToFireWood);
+                          }
+                      });
         }
 
         [Button("收到订单")]
@@ -150,6 +163,11 @@ namespace TN.Role
             }
 
             transform.MoveToUpdate(GameManager.Instance.CookingBench.transform.position, MoveSpeed);
+            if (GameManager.Instance.CookingBench.RemainFireWood == 0)
+            {
+                _fsm.ChangeState(CookState.RunToFireWood);
+                return;
+            }
         }
 
         private void RunToObjContainer_Update()
@@ -161,48 +179,97 @@ namespace TN.Role
             {
                 if (_curMenu.SourceMaterialInfos == null)
                 {
-                    _fsm.ChangeState(CookState.RunToFoodAllot);
-                    return;
+                    if (findFoodContainer.CanPickFood(_curMenu.TargetId))
+                    {
+                        TakeObj(_curMenu.TargetId, 1);
+                        findFoodContainer.RemoveFood(_curMenu.TargetId);
+                        _fsm.ChangeState(CookState.RunToFoodAllot);
+                        return;
+                    }
                 }
                 else
                 {
-                    // todo 这里没有判断一次没有带满的情况
+                    bool isTakeComplete = true;
                     if (_needTakeObjIds.Count > MaxTakeCount)
                     {
                         // 一次带不满
                         for (int i = 0; i < MaxTakeCount; i++)
                         {
-                            TakeObj(_needTakeObjIds.Dequeue());
+                            ObjType objType = _needTakeObjIds.Dequeue();
+                            if (findFoodContainer.CanPickFood(objType))
+                            {
+                                TakeObj(objType, 1);
+                                findFoodContainer.RemoveFood(objType);
+                            }
+                            else
+                            {
+                                isTakeComplete = false;
+                            }
                         }
                     }
                     else
                     {
                         foreach (ObjType needTakeObjId in _needTakeObjIds)
                         {
-                            TakeObj(needTakeObjId);
+                            if (findFoodContainer.CanPickFood(needTakeObjId))
+                            {
+                                findFoodContainer.RemoveFood(needTakeObjId);
+                                TakeObj(needTakeObjId, 1);
+                            }
+                            else
+                            {
+                                isTakeComplete = false;
+                            }
                         }
 
-                        _needTakeObjIds.Clear();
+                        if (isTakeComplete)
+                        {
+                            _needTakeObjIds.Clear();
+                        }
                     }
 
-                    _fsm.ChangeState(CookState.RunToCookingBench);
-                    return;
+                    if (isTakeComplete)
+                    {
+                        _fsm.ChangeState(CookState.RunToCookingBench);
+                        return;
+                    }
                 }
             }
         }
+
+        private bool _prepearAddFireWood = false;
+        private bool _needCook           = false;
 
         private void RunToCookingBench_Update()
         {
             bool isArrive = transform.MoveToUpdate(GameManager.Instance.CookingBench.transform.position, MoveSpeed);
             if (isArrive)
             {
+                if (_prepearAddFireWood)
+                {
+                    _prepearAddFireWood = false;
+                    Debug.Log("添加燃料");
+                    int count = TakeObjIds.Sum(tuple => tuple.Item2);
+                    GameManager.Instance.CookingBench.AddFireWood(count);
+                    ReleaseObj();
+                    if (_needCook)
+                    {
+                        _fsm.ChangeState(CookState.Cooking);
+                    }
+                    else
+                    {
+                        _fsm.ChangeState(CookState.None);
+                    }
+
+                    return;
+                }
+
                 if (_curMenu == null)
                 {
                     _fsm.ChangeState(CookState.None);
                     return;
                 }
 
-                // todo 需要判断是否加满原料了
                 ReleaseObj(); //卸下身上的原料
                 if (_needTakeObjIds.Count > 0)
                 {
@@ -217,20 +284,72 @@ namespace TN.Role
             }
         }
 
+        private CompositeDisposable _cookingDis = null;
+
         private void Cooking_Enter()
         {
+            _cookingDis = new CompositeDisposable();
+            _needCook = true;
             CookingObjId = _curMenu.TargetId;
             Observable.Timer(TimeSpan.FromSeconds(_curMenu.Duration))
                       .Subscribe(l =>
                       {
+                          _needCook = false;
                           _fsm.ChangeState(CookState.RunToFoodAllot);
                       })
-                      .AddTo(this);
+                      .AddTo(this)
+                      .AddTo(_cookingDis);
+
+            GameManager.Instance.CookingBench.StartCook();
+        }
+
+        private void Cooking_Update()
+        {
+            if (GameManager.Instance.CookingBench.RemainFireWood == 0)
+            {
+                _fsm.ChangeState(CookState.RunToFireWood);
+            }
+        }
+
+        private void Cooking_End()
+        {
+            _cookingDis?.Dispose();
+            GameManager.Instance.CookingBench.StopCook();
+        }
+
+        private void RunToFireWood_Enter()
+        {
+            //进入这个状态时，手里一定是空的
+            if (TakeObjIds.Count > 0)
+            {
+                Debug.LogError("手里有东西，不可能进入这个状态");
+            }
+        }
+
+        private void RunToFireWood_Update()
+        {
+            if (transform.MoveToUpdate(GameManager.Instance.FireWoodContainer.transform.position, MoveSpeed))
+            {
+                for (int i = 0; i < MaxTakeCount; i++)
+                {
+                    int count = GameManager.Instance.FireWoodContainer.Pick();
+                    if (count == 0)
+                    {
+                        break;
+                    }
+
+                    TakeObj(ObjType.FireWood, count);
+                }
+
+                _prepearAddFireWood = true;
+                _fsm.ChangeState(CookState.RunToCookingBench);
+            }
         }
 
         private void Cooking_Exit()
         {
             CookingObjId = ObjType.None;
+            GameManager.Instance.CookingBench.StopCook();
         }
 
 
@@ -255,9 +374,12 @@ namespace TN.Role
             get
             {
                 StringBuilder s = new StringBuilder();
-                foreach (ObjType takeObjId in TakeObjIds)
+                if (TakeObjIds != null)
                 {
-                    s.AppendLine(takeObjId.ToString());
+                    foreach ((ObjType, int) item in TakeObjIds)
+                    {
+                        s.AppendLine($"{item.Item1}:{item.Item2}");
+                    }
                 }
 
                 return $@"厨师：

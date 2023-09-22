@@ -1,0 +1,27 @@
+[
+  {
+    "Id": "Beaf",
+    "Name": "熟牛排",
+    "MaxCountPerGrid": 1
+  },
+  {
+    "Id": "OriginBeaf",
+    "Name": "生牛排",
+    "MaxCountPerGrid": 1
+  },
+  {
+    "Id": "Noodle",
+    "Name": "意大利牛排套餐",
+    "MaxCountPerGrid": 1
+  },
+  {
+    "Id": "Scone",
+    "Name": "曲奇",
+    "MaxCountPerGrid": 1
+  },
+  {
+    "Id": "FireWood",
+    "Name": "柴火",
+    "MaxCountPerGrid": 50
+  }
+]
