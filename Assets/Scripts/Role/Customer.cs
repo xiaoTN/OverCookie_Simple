@@ -9,7 +9,7 @@ namespace TN.Role
     /// <summary>
     /// 顾客
     /// </summary>
-    public class Customer: MonoBehaviour
+    public class Customer: BaseObj
     {
         /// <summary>
         /// 正在吃的食物Id
@@ -22,5 +22,7 @@ namespace TN.Role
         [ShowInInspector]
         [NonSerialized]
         public float HungerTime;
+
+        protected override string GizmoLabel { get; }
     }
 }

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using MonsterLove.StateMachine;
 using Sirenix.OdinInspector;
 using TN.Building;
@@ -14,7 +15,7 @@ namespace TN.Role
     /// <summary>
     /// 厨师
     /// </summary>
-    public class Cook : MonoBehaviour
+    public class Cook : BaseObj
     {
         /// <summary>
         /// 当前携带的物体Id
@@ -93,11 +94,13 @@ namespace TN.Role
         }
 
         private StateMachine<CookState> _fsm;
+
         [ReadOnly]
         [ShowInInspector]
-        private CookState               _curState;
-        private MenuInfo                _curMenu;
-        private Queue<ObjType>          _needTakeObjIds = new Queue<ObjType>();
+        private CookState _curState;
+
+        private MenuInfo       _curMenu;
+        private Queue<ObjType> _needTakeObjIds = new Queue<ObjType>();
 
 
         [Button]
@@ -126,7 +129,7 @@ namespace TN.Role
             {
                 _curMenu = GameManager.Instance.OrderFormMenuQueue.Dequeue();
                 _needTakeObjIds.Clear();
-                if(_curMenu.SourceMaterialInfos!=null)
+                if (_curMenu.SourceMaterialInfos != null)
                 {
                     //需要加工
                     foreach (SourceMaterialInfo curMenuSourceMaterialInfo in _curMenu.SourceMaterialInfos)
@@ -198,6 +201,7 @@ namespace TN.Role
                     _fsm.ChangeState(CookState.None);
                     return;
                 }
+
                 // todo 需要判断是否加满原料了
                 ReleaseObj(); //卸下身上的原料
                 if (_needTakeObjIds.Count > 0)
@@ -228,12 +232,13 @@ namespace TN.Role
         {
             CookingObjId = ObjType.None;
         }
-   
+
 
         private void RunToFoodAllot_Enter()
         {
             _curMenu = null;
         }
+
         private void RunToFoodAllot_Update()
         {
             bool isArrive = transform.MoveToUpdate(GameManager.Instance.FoodAllot.transform.position, MoveSpeed);
@@ -242,6 +247,22 @@ namespace TN.Role
                 //到达分配桌附近
                 ReleaseObj();
                 _fsm.ChangeState(CookState.RunToCookingBench);
+            }
+        }
+
+        protected override string GizmoLabel
+        {
+            get
+            {
+                StringBuilder s = new StringBuilder();
+                foreach (ObjType takeObjId in TakeObjIds)
+                {
+                    s.AppendLine(takeObjId.ToString());
+                }
+
+                return $@"厨师：
+携带的物品：{s.ToString()}
+正在烹饪的物品：{CookingObjId.ToString()}";
             }
         }
     }

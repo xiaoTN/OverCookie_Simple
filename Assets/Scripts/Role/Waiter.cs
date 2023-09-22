@@ -7,7 +7,7 @@ namespace TN.Role
     /// <summary>
     /// 服务员
     /// </summary>
-    public class Waiter: MonoBehaviour
+    public class Waiter: BaseObj
     {
         /// <summary>
         /// 携带物品的Id
@@ -17,5 +17,7 @@ namespace TN.Role
         /// 携带物品的数量
         /// </summary>
         public int TakeObjCount;
+
+        protected override string GizmoLabel { get; }
     }
 }

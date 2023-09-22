@@ -2,9 +2,14 @@ using UnityEngine;
 
 namespace TN.Building
 {
-    public class DiningTable: MonoBehaviour
+    public class DiningTable: BaseObj
     {
-        
-        
+        protected override string GizmoLabel
+        {
+            get
+            {
+                return "餐桌";
+            }
+        }
     }
 }

@@ -7,7 +7,7 @@ namespace TN.Building
     /// <summary>
     /// 灶台
     /// </summary>
-    public class CookingBench : MonoBehaviour
+    public class CookingBench : BaseObj
     {
         [ReadOnly]
         public ObjType CookingFoodId;
@@ -26,6 +26,14 @@ namespace TN.Building
         [Button]
         public void StopCooking()
         {
+        }
+
+        protected override string GizmoLabel
+        {
+            get
+            {
+                return $@"灶台";
+            }
         }
     }
 }
