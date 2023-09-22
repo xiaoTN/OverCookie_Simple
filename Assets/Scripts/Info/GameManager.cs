@@ -31,6 +31,7 @@ namespace TN.Info
         }
 
         public DiningTable       DiningTable;
+        public FoodAllot         FoodAllot;
         public FoodContainer     FoodContainer;
         public FireWoodContainer FireWoodContainer;
         public CookingBench      CookingBench;
@@ -42,6 +43,7 @@ namespace TN.Info
             MenuInfos = JsonUtils.ReadJsonFromStreamingAssets<List<MenuInfo>>("MenuInfo.json");
             FoodContainer = FindObjectOfType<FoodContainer>();
             DiningTable = FindObjectOfType<DiningTable>();
+            FoodAllot = FindObjectOfType<FoodAllot>();
             CookingBench = FindObjectOfType<CookingBench>();
         }
 

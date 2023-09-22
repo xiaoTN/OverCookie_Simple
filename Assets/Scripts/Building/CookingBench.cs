@@ -9,11 +9,13 @@ namespace TN.Building
     /// </summary>
     public class CookingBench : MonoBehaviour
     {
+        [ReadOnly]
         public ObjType CookingFoodId;
 
         /// <summary>
         /// 剩余柴火数
         /// </summary>
+        [ReadOnly]
         public int RemainFireWood;
 
         [Button]

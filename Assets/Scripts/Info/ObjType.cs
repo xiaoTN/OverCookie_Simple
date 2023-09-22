@@ -6,6 +6,7 @@ namespace TN.Info
     [JsonConverter(typeof(StringEnumConverter))]
     public enum ObjType
     {
+        None,
         FireWood,
         Beaf,
         OriginBeaf,
