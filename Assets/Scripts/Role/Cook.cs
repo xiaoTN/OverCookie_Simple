@@ -40,7 +40,7 @@ namespace TN.Role
         {
             if (TakeObjIds.Count > MaxTakeCount)
             {
-                Debug.LogError("拿不下了");
+                LogError("拿不下了");
                 return false;
             }
 
@@ -117,7 +117,7 @@ namespace TN.Role
             _fsm.Changed += state =>
             {
                 _curState = state;
-                Debug.Log($"进入状态：{state}");
+                Log($"进入状态：{state}");
             };
 
             gameObject.UpdateAsObservable()
@@ -127,7 +127,7 @@ namespace TN.Role
                       {
                           if (isZero)
                           {
-                              Debug.Log("灶台中柴火耗尽，需要添加柴火");
+                              Log("灶台中柴火耗尽，需要添加柴火");
                               _fsm.ChangeState(CookState.RunToFireWood);
                           }
                       });
@@ -149,7 +149,7 @@ namespace TN.Role
         private void ReceiveOrderForm(Customer customer,ObjType foodId)
         {
             if(foodId== ObjType.None) return;
-            Debug.Log($"收到订单：{foodId}");
+            Log($"收到订单：{foodId}");
             MenuInfo menuInfo = GameManager.Instance.MenuInfos.Find(info => info.TargetId == foodId);
             GameManager.Instance.AddOrder(customer,menuInfo);
         }
@@ -268,7 +268,7 @@ namespace TN.Role
                 if (_prepearAddFireWood)
                 {
                     _prepearAddFireWood = false;
-                    Debug.Log("添加燃料");
+                    Log("添加燃料");
                     int count = TakeObjIds.Sum(tuple => tuple.Item2);
                     GameManager.Instance.CookingBench.AddFireWood(count);
                     ReleaseObj();
@@ -342,7 +342,7 @@ namespace TN.Role
             //进入这个状态时，手里一定是空的
             if (TakeObjIds.Count > 0)
             {
-                Debug.LogError("手里有东西，不可能进入这个状态");
+                LogError("手里有东西，不可能进入这个状态");
             }
         }
 

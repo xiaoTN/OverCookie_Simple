@@ -32,4 +32,14 @@ public abstract class BaseObj : MonoBehaviour
     {
         transform.Label($"【{Name}】\n{GizmoLabel}");
     }
+
+    protected void Log(string message)
+    {
+        Debug.Log($"[{Name}] {message}",this);
+    }
+
+    protected void LogError(string message)
+    {
+        Debug.LogError($"[{Name}] {message}",this);
+    }
 }

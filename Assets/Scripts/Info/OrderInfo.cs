@@ -20,7 +20,7 @@ namespace TN.Info
 
         public override string ToString()
         {
-            return $"{MenuInfo.TargetId.ToString()}->{Customer.Name}";
+            return $"{MenuInfo.TargetId.ToString()}[1个]->{Customer.Name}";
         }
     }
 }

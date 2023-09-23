@@ -27,9 +27,23 @@ namespace TN.Role
         protected override string GizmoLabel { get; }
         [NonSerialized]
         public DiningTable DiningTable;
+
+        public ObjType  WantEatFoodType;
         public void Init(DiningTable diningTable)
         {
             DiningTable = diningTable;
+        }
+
+        /// <summary>
+        /// 下发订单
+        /// </summary>
+        /// <param name="orderInfo"></param>
+        [Button]
+        public void SendOrderInfo(ObjType objType)
+        {
+            Log($"下发订单：{objType.ToString()}");
+            WantEatFoodType = objType;
+            GameManager.Instance.AddOrder(this,objType);
         }
     }
 }

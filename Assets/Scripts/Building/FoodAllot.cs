@@ -34,5 +34,15 @@ namespace TN.Building
         {
             _orderQueue.Enqueue(curOrder);
         }
+
+        public bool HaveFood()
+        {
+            return _orderQueue.Count > 0;
+        }
+
+        public OrderInfo RemoveFood()
+        {
+            return _orderQueue.Dequeue();
+        }
     }
 }

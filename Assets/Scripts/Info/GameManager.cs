@@ -32,13 +32,19 @@ namespace TN.Info
         [ReadOnly]
         private Queue<OrderInfo> _orderFormMenuQueue = new Queue<OrderInfo>();
 
-      
+
         /// <summary>
         /// 添加预定
         /// </summary>
         public void AddOrder(Customer customer, MenuInfo menuInfo)
         {
-            _orderFormMenuQueue.Enqueue(new OrderInfo(menuInfo,customer));
+            _orderFormMenuQueue.Enqueue(new OrderInfo(menuInfo, customer));
+        }
+
+        public void AddOrder(Customer customer, ObjType objType)
+        {
+            MenuInfo findMenu = MenuInfos.Find(info => info.TargetId == objType);
+            AddOrder(customer, findMenu);
         }
 
         /// <summary>
@@ -56,6 +62,8 @@ namespace TN.Info
 
         public List<Customer>    Customers;
         public List<DiningTable> DiningTables;
+        public List<Cook>        Cooks;
+        public List<Waiter>      Waiters;
 
 
         public FoodAllot         FoodAllot;
@@ -75,8 +83,19 @@ namespace TN.Info
             FireWoodContainer = FindObjectOfType<FireWoodContainer>();
 
             DiningTables = FindObjectsOfType<DiningTable>().ToList();
+            Cooks = FindObjectsOfType<Cook>().ToList();
+            Waiters = FindObjectsOfType<Waiter>().ToList();
             Customers = FindObjectsOfType<Customer>().ToList();
-            
+
+            foreach (Cook cook in Cooks)
+            {
+                cook.Init();
+            }
+            foreach (Waiter waiter in Waiters)
+            {
+                waiter.Init();
+            }
+
             foreach (DiningTable diningTable in DiningTables)
             {
                 diningTable.Init();
