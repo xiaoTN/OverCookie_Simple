@@ -10,18 +10,18 @@ namespace TN.Info
         None,
 
         [LabelText("柴火")]
-        FireWood,
+        柴火,
 
         [LabelText("牛排")]
-        Beaf,
+        牛排,
 
         [LabelText("生牛肉")]
-        OriginBeaf,
+        生牛排,
 
         [LabelText("意大利牛排套餐")]
-        Noodle,
+        意大利牛排套餐,
 
         [LabelText("曲奇饼")]
-        Scone,
+        曲奇,
     }
 }

@@ -1,28 +1,28 @@
 [
   {
-    "TargetId": "Scone",
+    "TargetId": "曲奇",
     "SourceMaterialInfos": null,
     "Duration": -1.0
   },
   {
-    "TargetId": "Beaf",
+    "TargetId": "牛排",
     "SourceMaterialInfos": [
       {
-        "Id": "OriginBeaf",
+        "Id": "生牛排",
         "Count": 1
       }
     ],
     "Duration": 3.0
   },
   {
-    "TargetId": "Noodle",
+    "TargetId": "意大利牛排套餐",
     "SourceMaterialInfos": [
       {
-        "Id": "OriginBeaf",
+        "Id": "生牛排",
         "Count": 1
       },
       {
-        "Id": "Noodle",
+        "Id": "意大利牛排套餐",
         "Count": 1
       }
     ],

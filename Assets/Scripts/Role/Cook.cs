@@ -113,7 +113,7 @@ namespace TN.Role
         private OrderInfo _curOrder;
 
         private Queue<ObjType> _needTakeObjIds = new Queue<ObjType>();
-
+        public  Dictionary<ObjType,int>  HaveFinishOrder = new Dictionary<ObjType, int>();
 
         [Button]
         public void Init()
@@ -351,7 +351,7 @@ namespace TN.Role
                         break;
                     }
 
-                    TakeObj(ObjType.FireWood, count);
+                    TakeObj(ObjType.柴火, count);
                 }
 
                 _prepearAddFireWood = true;
@@ -379,6 +379,14 @@ namespace TN.Role
                 if(_foodAllot.CanEnqueueOrder())
                 {
                     _foodAllot.EnqueueOrder(_curOrder);
+                    if(HaveFinishOrder.ContainsKey(_curOrder.TargetFood)==false)
+                    {
+                        HaveFinishOrder.Add(_curOrder.TargetFood, 1);
+                    }
+                    else
+                    {
+                        HaveFinishOrder[_curOrder.TargetFood]++;
+                    }
                     _curOrder = null;
 
                     ReleaseObj();

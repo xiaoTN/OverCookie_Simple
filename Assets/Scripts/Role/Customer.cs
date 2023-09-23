@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using MonsterLove.StateMachine;
 using Sirenix.OdinInspector;
 using TN.Building;
@@ -47,7 +48,9 @@ namespace TN.Role
 
 
         private StateMachine<State> _fsm;
-        private State               _curState;
+        public State               _curState;
+
+        public Dictionary<ObjType,int> HaveFinishOrder = new Dictionary<ObjType, int>();
 
         public void Init(DiningTable diningTable)
         {
@@ -159,6 +162,14 @@ namespace TN.Role
         private void Eating_Exit()
         {
             Log($"吃完了：{WantOrderInfo.ToString()}");
+            if(HaveFinishOrder.ContainsKey(WantOrderInfo.TargetFood)==false)
+            {
+                HaveFinishOrder.Add(WantOrderInfo.TargetFood, 1);
+            }
+            else
+            {
+                HaveFinishOrder[WantOrderInfo.TargetFood]++;
+            }
             WantOrderInfo = null;
         }
 

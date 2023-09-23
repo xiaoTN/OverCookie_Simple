@@ -20,7 +20,7 @@ namespace TN.Building
 
         public int Pick()
         {
-            ObjInfo fireWood = GameManager.Instance.ObjInfos.Find(info => info.Id== ObjType.FireWood);
+            ObjInfo fireWood = GameManager.Instance.ObjInfos.Find(info => info.Id== ObjType.柴火);
             if (MaxCount > fireWood.MaxCountPerGrid)
             {
                 MaxCount -= fireWood.MaxCountPerGrid;

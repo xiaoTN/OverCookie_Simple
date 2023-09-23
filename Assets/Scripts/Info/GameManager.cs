@@ -1,11 +1,15 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using Sirenix.OdinInspector;
 using TN.Building;
 using TN.Common;
 using TN.Role;
+using UniRx;
+using UniRx.Triggers;
 using UnityEngine;
+using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
 namespace TN.Info
@@ -29,6 +33,16 @@ namespace TN.Info
         [ReadOnly]
         private Queue<OrderInfo> _orderFormMenuQueue = new Queue<OrderInfo>();
 
+        public string LogOrderForm()
+        {
+            StringBuilder s = new StringBuilder();
+            foreach (OrderInfo orderInfo in _orderFormMenuQueue)
+            {
+                s.AppendLine(orderInfo.ToString());
+            }
+
+            return s.ToString();
+        }
         [Button("收到随机订单")]
         private void AddOrderRandom()
         {
@@ -77,7 +91,7 @@ namespace TN.Info
         public FireWoodContainer FireWoodContainer;
         public CookingBench      CookingBench;
 
-
+        public ISubject<Unit> OnGameOver = new Subject<Unit>(); 
         public override void Init()
         {
             MenuInfos = JsonUtils.ReadJsonFromStreamingAssets<List<MenuInfo>>("MenuInfo.json");
@@ -106,6 +120,20 @@ namespace TN.Info
             {
                 diningTable.Init();
             }
+            
+            //监听顾客死亡
+            gameObject.UpdateAsObservable()
+                      .Select(unit => Customers.Exists(customer => customer._curState== Customer.State.Death))
+                      .ToReactiveProperty()
+                      .Subscribe(haveDeath =>
+                      {
+                          if (haveDeath)
+                          {
+                              Debug.LogError("有顾客死亡，游戏结束");
+                              Time.timeScale = 0;
+                              OnGameOver?.OnNext(Unit.Default);
+                          }
+                      });
         }
     }
 }
