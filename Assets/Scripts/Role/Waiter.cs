@@ -79,6 +79,11 @@ namespace TN.Role
                     OrderInfo takeOrder = _foodAllot.RemoveFood();
                     TakeObj(takeOrder);
                     Customer findCustomer = GameManager.Instance.Customers.Find(customer => _curTakeOrderInfo.Customer == customer);
+                    if (findCustomer == null)
+                    {
+                        LogError("找不到顾客");
+                        return;
+                    }
                     _targetDinningTable = findCustomer.DiningTable;
                     _fsm.ChangeState(State.RunToDinningTable);
                     return;

@@ -118,12 +118,15 @@ namespace TN.Role
             _randomTimer = 0;
         }
 
+        [MinMaxSlider(0,30)]
+        [LabelText("随机订单的时间范围")]
+        public Vector2 SendOrderRandomTimer=new Vector2(5,10);
         /// <summary>
         /// 更新随机下发订单的等待时间
         /// </summary>
         private void UpdateRandomSendOrderTimer()
         {
-            _randomTimer = Random.Range(5, 10f);
+            _randomTimer = Random.Range(SendOrderRandomTimer.x, SendOrderRandomTimer.y);
         }
 
         public void Eat()
@@ -131,12 +134,15 @@ namespace TN.Role
             _fsm.ChangeState(State.Eating);
         }
 
-        private float _eatTimer;
+        private float   _eatTimer;
+        [MinMaxSlider(0,30)]
+        [LabelText("随机进食持续时间")]
+        public  Vector2 EatTimeRange =new Vector2(5,10);
 
         private void Eating_Enter()
         {
             HungerTime = 0;
-            _eatTimer = Random.Range(5, 10f);
+            _eatTimer = Random.Range(EatTimeRange.x, EatTimeRange.y);
         }
 
         private void Eating_Update()

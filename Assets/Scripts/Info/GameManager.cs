@@ -5,6 +5,8 @@ using Sirenix.OdinInspector;
 using TN.Building;
 using TN.Common;
 using TN.Role;
+using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace TN.Info
 {
@@ -14,15 +16,10 @@ namespace TN.Info
         [NonSerialized]
         [TableList]
         public List<MenuInfo> MenuInfos;
-
-        public MenuInfo CurFirstMenu
+        
+        public bool HaveOrder
         {
-            get
-            {
-                if (_orderFormMenuQueue.Count > 0)
-                    return _orderFormMenuQueue.Peek().MenuInfo;
-                return null;
-            }
+            get { return _orderFormMenuQueue.Count > 0; }
         }
 
         /// <summary>
@@ -32,6 +29,13 @@ namespace TN.Info
         [ReadOnly]
         private Queue<OrderInfo> _orderFormMenuQueue = new Queue<OrderInfo>();
 
+        [Button("收到随机订单")]
+        private void AddOrderRandom()
+        {
+            int count = MenuInfos.Count;
+            MenuInfo randomMenu = MenuInfos[Random.Range(0, count)];
+            AddOrder(null, randomMenu);
+        }
 
         /// <summary>
         /// 添加预定
@@ -93,6 +97,7 @@ namespace TN.Info
             {
                 cook.Init();
             }
+
             foreach (Waiter waiter in Waiters)
             {
                 waiter.Init();

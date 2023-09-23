@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using TN.Info;
 using TN.Role;
@@ -19,11 +20,13 @@ namespace TN.Building
             }
         }
 
+        [NonSerialized]
         public List<Customer>  Customers;
         [NonSerialized]
         public List<OrderInfo> OrderInfos=new List<OrderInfo>();
         public void Init()
         {
+            Customers = GetComponentsInChildren<Customer>().ToList();
             foreach (Customer customer in Customers)
             {
                 customer.Init(this);

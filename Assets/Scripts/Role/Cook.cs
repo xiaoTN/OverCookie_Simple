@@ -23,6 +23,7 @@ namespace TN.Role
         /// todo 这种结构不支持序列化
         /// </summary>
         [ReadOnly]
+        [ShowInInspector]
         public List<(ObjType, int)> TakeObjIds = new List<(ObjType, int)>();
 
         /// <summary>
@@ -45,6 +46,7 @@ namespace TN.Role
             }
 
             TakeObjIds.Add((objType, count));
+            Log($"携带 {objType} [{count}个]");
             return true;
         }
 
@@ -53,6 +55,7 @@ namespace TN.Role
         /// </summary>
         private void ReleaseObj()
         {
+            Log($"从身上卸下物品");
             TakeObjIds.Clear();
         }
 
@@ -92,6 +95,11 @@ namespace TN.Role
             /// 走向食物分配桌
             /// </summary>
             RunToFoodAllot,
+
+            /// <summary>
+            /// 排队等待做饭
+            /// </summary>
+            WaitingToCooking,
             Cooking,
         }
 
@@ -107,7 +115,8 @@ namespace TN.Role
         [ShowInInspector]
         [ReadOnly]
         private OrderInfo _curOrder;
-        private Queue<ObjType>        _needTakeObjIds = new Queue<ObjType>();
+
+        private Queue<ObjType> _needTakeObjIds = new Queue<ObjType>();
 
 
         [Button]
@@ -119,9 +128,10 @@ namespace TN.Role
                 _curState = state;
                 Log($"进入状态：{state}");
             };
-
+            _foodAllot = GameManager.Instance.FoodAllot;
+            _cookingBench = GameManager.Instance.CookingBench;
             gameObject.UpdateAsObservable()
-                      .Select(unit => GameManager.Instance.CookingBench.RemainFireWood == 0)
+                      .Select(unit => _cookingBench.RemainFireWood == 0)
                       .ToReactiveProperty()
                       .Subscribe(isZero =>
                       {
@@ -132,40 +142,20 @@ namespace TN.Role
                           }
                       });
         }
-
         
-        [DisableInEditorMode]
-        [Button("收到订单(随机一名顾客)")]
-        private void ReceiveOrderForm(ObjType foodId)
-        {
-            int count = GameManager.Instance.Customers.Count;
-            int randomIndex = Random.Range(0, count);
-            Customer randomCustomer = GameManager.Instance.Customers[randomIndex];
-            ReceiveOrderForm(randomCustomer,foodId);
-        }
-
-        [DisableInEditorMode]
-        [Button("收到订单")]
-        private void ReceiveOrderForm(Customer customer,ObjType foodId)
-        {
-            if(foodId== ObjType.None) return;
-            Log($"收到订单：{foodId}");
-            MenuInfo menuInfo = GameManager.Instance.MenuInfos.Find(info => info.TargetId == foodId);
-            GameManager.Instance.AddOrder(customer,menuInfo);
-        }
 
         private void None_Update()
         {
-            if (GameManager.Instance.CookingBench.RemainFireWood == 0)
+            if (_cookingBench.RemainFireWood == 0)
             {
                 _fsm.ChangeState(CookState.RunToFireWood);
                 return;
             }
-            
-            MenuInfo firstMenu = GameManager.Instance.CurFirstMenu;
-            if (firstMenu != null)
+
+            if (GameManager.Instance.HaveOrder)
             {
                 _curOrder = GameManager.Instance.RemoveOrder();
+                Log($"接收订单：{_curOrder}");
                 _needTakeObjIds.Clear();
                 if (_curOrder.MenuInfo.SourceMaterialInfos != null)
                 {
@@ -187,7 +177,7 @@ namespace TN.Role
                 return;
             }
 
-            transform.MoveToUpdate(GameManager.Instance.CookingBench.transform.position, MoveSpeed);
+            transform.MoveToUpdate(_cookingBench.transform.position, MoveSpeed);
         }
 
         private void RunToObjContainer_Update()
@@ -262,7 +252,7 @@ namespace TN.Role
 
         private void RunToCookingBench_Update()
         {
-            bool isArrive = transform.MoveToUpdate(GameManager.Instance.CookingBench.transform.position, MoveSpeed);
+            bool isArrive = transform.MoveToUpdate(_cookingBench.transform.position, MoveSpeed);
             if (isArrive)
             {
                 if (_prepearAddFireWood)
@@ -270,7 +260,7 @@ namespace TN.Role
                     _prepearAddFireWood = false;
                     Log("添加燃料");
                     int count = TakeObjIds.Sum(tuple => tuple.Item2);
-                    GameManager.Instance.CookingBench.AddFireWood(count);
+                    _cookingBench.AddFireWood(count);
                     ReleaseObj();
                     if (_needCook)
                     {
@@ -299,12 +289,28 @@ namespace TN.Role
                 }
 
                 // 开始做饭
-                _fsm.ChangeState(CookState.Cooking);
+                if (_cookingBench.CanUse())
+                {
+                    _fsm.ChangeState(CookState.Cooking);
+                    return;
+                }
+
+                _fsm.ChangeState(CookState.WaitingToCooking);
                 return;
             }
         }
 
+        private void WaitingToCooking_Update()
+        {
+            if (_cookingBench.CanUse())
+            {
+                _fsm.ChangeState(CookState.Cooking);
+            }
+        }
+
         private CompositeDisposable _cookingDis = null;
+        private CookingBench        _cookingBench;
+        private FoodAllot           _foodAllot;
 
         private void Cooking_Enter()
         {
@@ -315,17 +321,18 @@ namespace TN.Role
                       .Subscribe(l =>
                       {
                           _needCook = false;
+                          TakeObj(CookingObjId, 1);
                           _fsm.ChangeState(CookState.RunToFoodAllot);
                       })
                       .AddTo(this)
                       .AddTo(_cookingDis);
 
-            GameManager.Instance.CookingBench.StartCook();
+            _cookingBench.StartCook();
         }
 
         private void Cooking_Update()
         {
-            if (GameManager.Instance.CookingBench.RemainFireWood == 0)
+            if (_cookingBench.RemainFireWood == 0)
             {
                 _fsm.ChangeState(CookState.RunToFireWood);
             }
@@ -334,7 +341,7 @@ namespace TN.Role
         private void Cooking_End()
         {
             _cookingDis?.Dispose();
-            GameManager.Instance.CookingBench.StopCook();
+            _cookingBench.StopCook();
         }
 
         private void RunToFireWood_Enter()
@@ -369,7 +376,7 @@ namespace TN.Role
         private void Cooking_Exit()
         {
             CookingObjId = ObjType.None;
-            GameManager.Instance.CookingBench.StopCook();
+            _cookingBench.StopCook();
         }
 
 
@@ -379,11 +386,11 @@ namespace TN.Role
 
         private void RunToFoodAllot_Update()
         {
-            bool isArrive = transform.MoveToUpdate(GameManager.Instance.FoodAllot.transform.position, MoveSpeed);
+            bool isArrive = transform.MoveToUpdate(_foodAllot.transform.position, MoveSpeed);
             if (isArrive)
             {
                 //到达分配桌附近
-                GameManager.Instance.FoodAllot.EnqueueOrder(_curOrder);
+                _foodAllot.EnqueueOrder(_curOrder);
                 _curOrder = null;
 
                 ReleaseObj();

@@ -6,7 +6,7 @@ namespace TN.Info
     public class ObjInfo
     {
         public ObjType Id;
-        public string   Name;
+        public string  Name;
 
         /// <summary>
         /// 每单位的最大数量

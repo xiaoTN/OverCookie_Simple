@@ -37,6 +37,10 @@ public abstract class BaseObj : MonoBehaviour
     {
         Debug.Log($"[{Name}] {message}",this);
     }
+    protected void LogWarning(string message)
+    {
+        Debug.LogWarning($"[{Name}] {message}",this);
+    }
 
     protected void LogError(string message)
     {

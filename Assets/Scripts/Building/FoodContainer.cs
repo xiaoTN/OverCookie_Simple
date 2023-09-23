@@ -51,7 +51,7 @@ namespace TN.Building
             ContainerInfo containerInfo = ContainerInfos.Find(info => info.ObjId == objType);
             if (containerInfo.Count < count)
             {
-                Log($"箱子里食物【{objType}】只有{containerInfo.Count}，但需要拿出{count}");
+                LogWarning($"箱子里食物【{objType}】只有{containerInfo.Count}，但需要拿出{count}");
                 ContainerInfos.Remove(containerInfo);
                 return containerInfo.Count;
             }

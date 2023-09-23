@@ -14,6 +14,7 @@ namespace TN.Info
         /// 食物Id
         /// </summary>
         public ObjType TargetId;
+
         /// <summary>
         /// 所需的原材料信息
         /// </summary>

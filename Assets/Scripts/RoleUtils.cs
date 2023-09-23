@@ -26,7 +26,7 @@ public static class RoleUtils
         });
     }
 
-    public static bool MoveToUpdate(this Transform root, Vector3 target,float speed, float stopDistance = 0.5f)
+    public static bool MoveToUpdate(this Transform root, Vector3 target,float speed, float stopDistance = 1.5f)
     {
         if (Vector3.SqrMagnitude(root.position - target) < stopDistance * stopDistance)
         {

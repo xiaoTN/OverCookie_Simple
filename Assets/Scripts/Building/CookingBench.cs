@@ -20,6 +20,10 @@ namespace TN.Building
         [ReadOnly]
         public int RemainFireWood;
 
+        /// <summary>
+        /// 最大使用数量
+        /// </summary>
+        public int MaxUseCount=2;
 
         protected override string GizmoLabel
         {
@@ -55,6 +59,15 @@ namespace TN.Building
                        .AddTo(this);
         }
 
+        public bool CanUse()
+        {
+            if (_usingCount.Value < MaxUseCount)
+            {
+                return true;
+            }
+
+            return false;
+        }
         public void StartCook()
         {
             _usingCount.Value++;
