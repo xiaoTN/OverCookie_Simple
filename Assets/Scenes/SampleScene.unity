@@ -174,6 +174,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   BaseColor: {r: 0, g: 0, b: 0, a: 0}
+  GUID: 71f4036f-5bcc-4acc-853e-38ef1a924cc1
   _name: "\u9910\u684C"
 --- !u!23 &68128063
 MeshRenderer:
@@ -272,6 +273,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   BaseColor: {r: 0.40899786, g: 0.61750984, b: 0.8584906, a: 0}
+  GUID: a44db6c4-57fe-408b-b20b-65ba67270255
   _name: "\u987E\u5BA2"
   MaxHungryTime: 30
   SendOrderRandomTimer: {x: 5.000001, y: 10.792684}
@@ -373,6 +375,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   BaseColor: {r: 0.40899786, g: 0.61750984, b: 0.8584906, a: 0}
+  GUID: 99a49374-4827-49a9-865d-7253aa98b110
   _name: "\u987E\u5BA2"
   MaxHungryTime: 30
   SendOrderRandomTimer: {x: 5.000001, y: 10.792684}
@@ -512,6 +515,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   BaseColor: {r: 0.40899786, g: 0.61750984, b: 0.8584906, a: 0}
+  GUID: 28aa64a8-5fb6-424d-8f28-1f6dabfd7e60
   _name: "\u987E\u5BA2"
   MaxHungryTime: 30
   SendOrderRandomTimer: {x: 5.000001, y: 10.792684}
@@ -711,6 +715,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   BaseColor: {r: 0.8018868, g: 0.77009267, b: 0.7224546, a: 0}
+  GUID: 9d5ae605-370e-44f0-9c3f-c92f9ec5604d
   _name: "\u53A8\u5E08"
   MaxTakeCount: 2
   MoveSpeed: 5
@@ -813,6 +818,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   BaseColor: {r: 0.40899786, g: 0.61750984, b: 0.8584906, a: 0}
+  GUID: d587e673-4c96-4586-a6dc-bd9b2678844d
   _name: "\u987E\u5BA2"
   MaxHungryTime: 30
   SendOrderRandomTimer: {x: 5.000001, y: 10.792684}
@@ -1008,6 +1014,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   BaseColor: {r: 0.40899786, g: 0.61750984, b: 0.8584906, a: 0}
+  GUID: d7df7848-0545-4afd-a9f5-c903023fcce0
   _name: "\u987E\u5BA2"
   MaxHungryTime: 30
   SendOrderRandomTimer: {x: 5.000001, y: 10.792684}
@@ -1197,6 +1204,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   BaseColor: {r: 0, g: 0, b: 0, a: 0}
+  GUID: d51c46e8-6dbf-4d0c-a56f-d51e0bdcde8a
   _name: "\u9910\u684C"
 --- !u!23 &974268706
 MeshRenderer:
@@ -1260,6 +1268,7 @@ GameObject:
   - component: {fileID: 1115993543}
   - component: {fileID: 1115993542}
   - component: {fileID: 1115993544}
+  - component: {fileID: 1115993545}
   m_Layer: 6
   m_Name: CookingBench
   m_TagString: Untagged
@@ -1345,9 +1354,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   BaseColor: {r: 1, g: 0.32941177, b: 0.33333334, a: 0}
+  GUID: f40447c0-f3dd-4eee-bab8-86b365e269bf
   _name: "\u7076\u53F0"
   RemainFireWood: 0
   MaxUseCount: 2
+--- !u!114 &1115993545
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1115993540}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb219b23cdf4b314f94a27bca3cc8012, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1177983024
 GameObject:
   m_ObjectHideFlags: 0
@@ -1445,8 +1467,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   BaseColor: {r: 0, g: 0, b: 0, a: 0}
+  GUID: 14eda476-6a47-433d-894e-b32229675921
   _name: "\u67F4\u706B\u7BB1"
-  MaxCount: 60
+  MaxCount: 1000
 --- !u!1 &1218817306
 GameObject:
   m_ObjectHideFlags: 0
@@ -1588,6 +1611,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   BaseColor: {r: 0.8018868, g: 0.77009267, b: 0.7224546, a: 0}
+  GUID: 095202a3-8b92-4574-8495-d1429079a3e7
   _name: "\u53A8\u5E08"
   MaxTakeCount: 2
   MoveSpeed: 5
@@ -1690,6 +1714,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   BaseColor: {r: 0.58431375, g: 0.48235297, b: 0.18823531, a: 0}
+  GUID: 923c2f01-3c36-4ee4-b229-ce470b561a81
   _name: "\u98DF\u7269\u5206\u914D\u684C"
   MaxCount: 2
 --- !u!23 &1337607999
@@ -1760,7 +1785,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1434829311
 Transform:
   m_ObjectHideFlags: 0
@@ -1789,6 +1814,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   BaseColor: {r: 1, g: 0.9490197, b: 0, a: 0}
+  GUID: d241bec3-d7be-40d8-bcc0-d55ccbcb03cf
   _name: "\u670D\u52A1\u5458"
   MoveSpeed: 5
 --- !u!23 &1434829313
@@ -1888,6 +1914,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   BaseColor: {r: 0.40899786, g: 0.61750984, b: 0.8584906, a: 0}
+  GUID: 81de0b86-005a-4ebe-adda-19757f644d52
   _name: "\u987E\u5BA2"
   MaxHungryTime: 30
   SendOrderRandomTimer: {x: 5.000001, y: 10.792684}
@@ -2022,6 +2049,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   BaseColor: {r: 0.40899786, g: 0.61750984, b: 0.8584906, a: 0}
+  GUID: feefbf47-c633-4e34-91a9-e7ffbab239e3
   _name: "\u987E\u5BA2"
   MaxHungryTime: 30
   SendOrderRandomTimer: {x: 5.000001, y: 10.792684}
@@ -2173,6 +2201,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   BaseColor: {r: 0.43137258, g: 0.6313726, b: 0.23137257, a: 0}
+  GUID: d1846a81-7ca6-4f30-a260-f8f3000ab28e
   _name: "\u98DF\u7269\u7BB1"
   ContainerInfos:
   - ObjId: 3
@@ -2267,6 +2296,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   BaseColor: {r: 0.8018868, g: 0.77009267, b: 0.7224546, a: 0}
+  GUID: 400a99d6-721c-4415-a51d-c5347d56a892
   _name: "\u53A8\u5E08"
   MaxTakeCount: 2
   MoveSpeed: 5
@@ -2369,6 +2399,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   BaseColor: {r: 0.8018868, g: 0.77009267, b: 0.7224546, a: 0}
+  GUID: a234e858-1cd9-4537-89b5-d68ac225fa32
   _name: "\u53A8\u5E08"
   MaxTakeCount: 2
   MoveSpeed: 5
@@ -2515,6 +2546,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   BaseColor: {r: 0.8018868, g: 0.77009267, b: 0.7224546, a: 0}
+  GUID: 25d66936-c0be-4126-8c8f-e0d1eb1434d5
   _name: "\u53A8\u5E08"
   MaxTakeCount: 2
   MoveSpeed: 5
@@ -2617,6 +2649,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   BaseColor: {r: 1, g: 0.94832873, b: 0, a: 0}
+  GUID: f7b7bbab-7910-45e2-8bba-ae3e0cb35293
   _name: "\u670D\u52A1\u5458"
   MoveSpeed: 5
 --- !u!23 &2074108149
@@ -2716,6 +2749,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   BaseColor: {r: 0.40899786, g: 0.61750984, b: 0.8584906, a: 0}
+  GUID: 40ab6ee1-7967-42a3-8102-a7aa60cbc17a
   _name: "\u987E\u5BA2"
   MaxHungryTime: 30
   SendOrderRandomTimer: {x: 5.000001, y: 10.792684}
@@ -2817,6 +2851,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   BaseColor: {r: 0.8018868, g: 0.77009267, b: 0.7224546, a: 0}
+  GUID: f4b14291-3aac-410a-9c96-ad7d1757d78b
   _name: "\u53A8\u5E08"
   MaxTakeCount: 2
   MoveSpeed: 5

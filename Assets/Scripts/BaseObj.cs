@@ -18,6 +18,13 @@ public abstract class BaseObj : MonoBehaviour
         }
     }
 
+    public string GUID;
+
+    private void Reset()
+    {
+        GUID = Guid.NewGuid().ToString();
+    }
+
     private void CreateMaterial()
     {
         Material mat = new Material(Shader.Find("Standard"));

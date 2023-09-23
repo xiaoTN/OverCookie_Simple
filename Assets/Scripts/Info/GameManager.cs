@@ -78,9 +78,8 @@ namespace TN.Info
         public CookingBench      CookingBench;
 
 
-        protected override void SetUp()
+        public override void Init()
         {
-            base.SetUp();
             MenuInfos = JsonUtils.ReadJsonFromStreamingAssets<List<MenuInfo>>("MenuInfo.json");
             ObjInfos = JsonUtils.ReadJsonFromStreamingAssets<List<ObjInfo>>("ObjInfo.json");
             FoodContainer = FindObjectOfType<FoodContainer>();
