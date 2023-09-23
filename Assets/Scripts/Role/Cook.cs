@@ -95,11 +95,7 @@ namespace TN.Role
             /// 走向食物分配桌
             /// </summary>
             RunToFoodAllot,
-
-            /// <summary>
-            /// 排队等待做饭
-            /// </summary>
-            WaitingToCooking,
+            
             Cooking,
         }
 
@@ -280,31 +276,21 @@ namespace TN.Role
                     return;
                 }
 
-                ReleaseObj(); //卸下身上的原料
-                if (_needTakeObjIds.Count > 0)
-                {
-                    //继续拿原料
-                    _fsm.ChangeState(CookState.RunToObjContainer);
-                    return;
-                }
+               
 
                 // 开始做饭
                 if (_cookingBench.CanUse())
                 {
+                    ReleaseObj(); //卸下身上的原料
+                    if (_needTakeObjIds.Count > 0)
+                    {
+                        //继续拿原料
+                        _fsm.ChangeState(CookState.RunToObjContainer);
+                        return;
+                    }
                     _fsm.ChangeState(CookState.Cooking);
                     return;
                 }
-
-                _fsm.ChangeState(CookState.WaitingToCooking);
-                return;
-            }
-        }
-
-        private void WaitingToCooking_Update()
-        {
-            if (_cookingBench.CanUse())
-            {
-                _fsm.ChangeState(CookState.Cooking);
             }
         }
 
@@ -390,11 +376,14 @@ namespace TN.Role
             if (isArrive)
             {
                 //到达分配桌附近
-                _foodAllot.EnqueueOrder(_curOrder);
-                _curOrder = null;
+                if(_foodAllot.CanEnqueueOrder())
+                {
+                    _foodAllot.EnqueueOrder(_curOrder);
+                    _curOrder = null;
 
-                ReleaseObj();
-                _fsm.ChangeState(CookState.RunToCookingBench);
+                    ReleaseObj();
+                    _fsm.ChangeState(CookState.RunToCookingBench);
+                }
             }
         }
 

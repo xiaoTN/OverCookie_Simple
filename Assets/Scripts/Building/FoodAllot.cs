@@ -27,9 +27,20 @@ namespace TN.Building
             }
         }
 
+        public int MaxCount=2;
         [ShowInInspector]
         [ReadOnly]
         private Queue<OrderInfo> _orderQueue = new Queue<OrderInfo>();
+
+        public bool CanEnqueueOrder()
+        {
+            if (_orderQueue.Count < MaxCount)
+            {
+                return true;
+            }
+
+            return false;
+        }
         public void EnqueueOrder(OrderInfo curOrder)
         {
             _orderQueue.Enqueue(curOrder);

@@ -11,9 +11,6 @@ namespace TN.Building
     /// </summary>
     public class CookingBench : BaseObj
     {
-        [ReadOnly]
-        public ObjType CookingFoodId;
-
         /// <summary>
         /// 剩余柴火数
         /// </summary>
@@ -27,8 +24,7 @@ namespace TN.Building
 
         protected override string GizmoLabel
         {
-            get { return $@"柴火数：{RemainFireWood}
-正在烹饪的食物：{CookingFoodId.ToString()}"; }
+            get { return $@"柴火数：{RemainFireWood}"; }
         }
 
         private ReactiveProperty<int> _usingCount = new ReactiveProperty<int>();

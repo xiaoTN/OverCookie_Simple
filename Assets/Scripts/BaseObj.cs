@@ -10,6 +10,14 @@ public abstract class BaseObj : MonoBehaviour
     [InlineButton(nameof(CreateMaterial))]
     public Color BaseColor;
 
+    public int Id
+    {
+        get
+        {
+            return GetInstanceID();
+        }
+    }
+
     private void CreateMaterial()
     {
         Material mat = new Material(Shader.Find("Standard"));
@@ -18,8 +26,18 @@ public abstract class BaseObj : MonoBehaviour
         AssetDatabase.CreateAsset(mat,$"Assets/ArtResources/Materials/{gameObject.name}.mat");
         AssetDatabase.Refresh();
     }
+    [FormerlySerializedAs("Name")]
     [FormerlySerializedAs("_gizmoName")]
-    public string Name;
+    [SerializeField]
+    private string _name;
+
+    public string SingleName
+    {
+        get
+        {
+            return $"{_name} {Id}";
+        }
+    }
     protected abstract string GizmoLabel { get; }
 
     protected virtual void Awake()
@@ -30,20 +48,20 @@ public abstract class BaseObj : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        transform.Label($"【{Name}】\n{GizmoLabel}");
+        transform.Label($"【{SingleName}】\n{GizmoLabel}");
     }
 
     protected void Log(string message)
     {
-        Debug.Log($"[{Name}] {message}",this);
+        Debug.Log($"[{SingleName}] {message}",this);
     }
     protected void LogWarning(string message)
     {
-        Debug.LogWarning($"[{Name}] {message}",this);
+        Debug.LogWarning($"[{SingleName}] {message}",this);
     }
 
     protected void LogError(string message)
     {
-        Debug.LogError($"[{Name}] {message}",this);
+        Debug.LogError($"[{SingleName}] {message}",this);
     }
 }

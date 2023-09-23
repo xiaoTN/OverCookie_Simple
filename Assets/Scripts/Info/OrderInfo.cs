@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using TN.Role;
 
 namespace TN.Info
@@ -24,7 +25,8 @@ namespace TN.Info
             {
                 return String.Empty;
             }
-            return $"{MenuInfo.TargetId.ToString()}[1个]->{Customer.Name}";
+
+            return $"{MenuInfo.TargetId.ToString()}[1个]->{Customer.SingleName}";
         }
     }
 }
