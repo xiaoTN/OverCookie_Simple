@@ -4,6 +4,7 @@ using System.Linq;
 using Sirenix.OdinInspector;
 using TN.Building;
 using TN.Common;
+using TN.Role;
 
 namespace TN.Info
 {
@@ -12,117 +13,51 @@ namespace TN.Info
         [ShowInInspector]
         [NonSerialized]
         [TableList]
-        [InlineButton(nameof(SaveMenuInfo))]
         public List<MenuInfo> MenuInfos;
 
-        private void SaveMenuInfo()
+        public MenuInfo CurFirstMenu
         {
-            List<MenuInfo> menuInfos = new List<MenuInfo>()
+            get
             {
-                new MenuInfo()
-                {
-                    TargetId = ObjType.Scone,
-                    Duration = -1,
-                    SourceMaterialInfos = null,
-                },
-                new MenuInfo()
-                {
-                    TargetId = ObjType.Beaf,
-                    Duration = 3,
-                    SourceMaterialInfos = new List<SourceMaterialInfo>()
-                    {
-                        new SourceMaterialInfo()
-                        {
-                            Id = ObjType.OriginBeaf,
-                            Count = 1
-                        }
-                    }
-                },
-                new MenuInfo()
-                {
-                    TargetId = ObjType.Noodle,
-                    Duration = 10,
-                    SourceMaterialInfos = new List<SourceMaterialInfo>()
-                    {
-                        new SourceMaterialInfo()
-                        {
-                            Id = ObjType.Beaf,
-                            Count = 1,
-                        },
-                        new SourceMaterialInfo()
-                        {
-                            Id = ObjType.Noodle,
-                            Count = 1
-                        }
-                    }
-                }
-            };
-            JsonUtils.WriteJson(menuInfos, "MenuInfo.json");
+                if (_orderFormMenuQueue.Count > 0)
+                    return _orderFormMenuQueue.Peek().MenuInfo;
+                return null;
+            }
         }
 
         /// <summary>
         /// 订单队列
         /// </summary>
         [ShowInInspector]
-        [NonSerialized]
-        public Queue<MenuInfo> OrderFormMenuQueue = new Queue<MenuInfo>();
+        [ReadOnly]
+        private Queue<OrderInfo> _orderFormMenuQueue = new Queue<OrderInfo>();
 
-        public MenuInfo CurFirstMenu
+      
+        /// <summary>
+        /// 添加预定
+        /// </summary>
+        public void AddOrder(Customer customer, MenuInfo menuInfo)
         {
-            get
-            {
-                if (OrderFormMenuQueue.Count > 0)
-                    return OrderFormMenuQueue.Peek();
-                return null;
-            }
+            _orderFormMenuQueue.Enqueue(new OrderInfo(menuInfo,customer));
+        }
+
+        /// <summary>
+        /// 移除订单
+        /// </summary>
+        public OrderInfo RemoveOrder()
+        {
+            return _orderFormMenuQueue.Dequeue();
         }
 
         [ShowInInspector]
         [NonSerialized]
         [TableList]
-        [InlineButton(nameof(SaveObjInfo))]
         public List<ObjInfo> ObjInfos;
 
-        private void SaveObjInfo()
-        {
-            List<ObjInfo> infos = new List<ObjInfo>()
-            {
-                new ObjInfo()
-                {
-                    Id = ObjType.Beaf,
-                    Name = "熟牛排",
-                    MaxCountPerGrid = 1
-                },
-                new ObjInfo()
-                {
-                    Id = ObjType.OriginBeaf,
-                    Name = "生牛排",
-                    MaxCountPerGrid = 1
-                },
-                new ObjInfo()
-                {
-                    Id = ObjType.Noodle,
-                    Name = "意大利牛排套餐",
-                    MaxCountPerGrid = 1
-                },
-                new ObjInfo()
-                {
-                    Id = ObjType.Scone,
-                    Name = "曲奇",
-                    MaxCountPerGrid = 1
-                },
-                new ObjInfo()
-                {
-                    Id = ObjType.FireWood,
-                    Name = "柴火",
-                    MaxCountPerGrid = 50
-                },
-            };
-            JsonUtils.WriteJson(infos, "ObjInfo.json");
-        }
-        
+        public List<Customer>    Customers;
+        public List<DiningTable> DiningTables;
 
-        public DiningTable       DiningTable;
+
         public FoodAllot         FoodAllot;
         public FoodContainer     FoodContainer;
         public FireWoodContainer FireWoodContainer;
@@ -135,10 +70,17 @@ namespace TN.Info
             MenuInfos = JsonUtils.ReadJsonFromStreamingAssets<List<MenuInfo>>("MenuInfo.json");
             ObjInfos = JsonUtils.ReadJsonFromStreamingAssets<List<ObjInfo>>("ObjInfo.json");
             FoodContainer = FindObjectOfType<FoodContainer>();
-            DiningTable = FindObjectOfType<DiningTable>();
             FoodAllot = FindObjectOfType<FoodAllot>();
             CookingBench = FindObjectOfType<CookingBench>();
             FireWoodContainer = FindObjectOfType<FireWoodContainer>();
+
+            DiningTables = FindObjectsOfType<DiningTable>().ToList();
+            Customers = FindObjectsOfType<Customer>().ToList();
+            
+            foreach (DiningTable diningTable in DiningTables)
+            {
+                diningTable.Init();
+            }
         }
     }
 }

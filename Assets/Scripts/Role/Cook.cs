@@ -9,6 +9,7 @@ using TN.Info;
 using UniRx;
 using UniRx.Triggers;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace TN.Role
 {
@@ -100,8 +101,13 @@ namespace TN.Role
         [ShowInInspector]
         private CookState _curState;
 
-        private MenuInfo       _curMenu;
-        private Queue<ObjType> _needTakeObjIds = new Queue<ObjType>();
+        /// <summary>
+        /// 当前的订单信息
+        /// </summary>
+        [ShowInInspector]
+        [ReadOnly]
+        private OrderInfo _curOrder;
+        private Queue<ObjType>        _needTakeObjIds = new Queue<ObjType>();
 
 
         [Button]
@@ -127,25 +133,44 @@ namespace TN.Role
                       });
         }
 
-        [Button("收到订单")]
+        
+        [DisableInEditorMode]
+        [Button("收到订单(随机一名顾客)")]
         private void ReceiveOrderForm(ObjType foodId)
         {
+            int count = GameManager.Instance.Customers.Count;
+            int randomIndex = Random.Range(0, count);
+            Customer randomCustomer = GameManager.Instance.Customers[randomIndex];
+            ReceiveOrderForm(randomCustomer,foodId);
+        }
+
+        [DisableInEditorMode]
+        [Button("收到订单")]
+        private void ReceiveOrderForm(Customer customer,ObjType foodId)
+        {
+            if(foodId== ObjType.None) return;
             Debug.Log($"收到订单：{foodId}");
             MenuInfo menuInfo = GameManager.Instance.MenuInfos.Find(info => info.TargetId == foodId);
-            GameManager.Instance.OrderFormMenuQueue.Enqueue(menuInfo);
+            GameManager.Instance.AddOrder(customer,menuInfo);
         }
 
         private void None_Update()
         {
+            if (GameManager.Instance.CookingBench.RemainFireWood == 0)
+            {
+                _fsm.ChangeState(CookState.RunToFireWood);
+                return;
+            }
+            
             MenuInfo firstMenu = GameManager.Instance.CurFirstMenu;
             if (firstMenu != null)
             {
-                _curMenu = GameManager.Instance.OrderFormMenuQueue.Dequeue();
+                _curOrder = GameManager.Instance.RemoveOrder();
                 _needTakeObjIds.Clear();
-                if (_curMenu.SourceMaterialInfos != null)
+                if (_curOrder.MenuInfo.SourceMaterialInfos != null)
                 {
                     //需要加工
-                    foreach (SourceMaterialInfo curMenuSourceMaterialInfo in _curMenu.SourceMaterialInfos)
+                    foreach (SourceMaterialInfo curMenuSourceMaterialInfo in _curOrder.MenuInfo.SourceMaterialInfos)
                     {
                         for (int i = 0; i < curMenuSourceMaterialInfo.Count; i++)
                         {
@@ -155,7 +180,7 @@ namespace TN.Role
                 }
                 else
                 {
-                    _needTakeObjIds.Enqueue(_curMenu.TargetId);
+                    _needTakeObjIds.Enqueue(_curOrder.MenuInfo.TargetId);
                 }
 
                 _fsm.ChangeState(CookState.RunToObjContainer);
@@ -163,11 +188,6 @@ namespace TN.Role
             }
 
             transform.MoveToUpdate(GameManager.Instance.CookingBench.transform.position, MoveSpeed);
-            if (GameManager.Instance.CookingBench.RemainFireWood == 0)
-            {
-                _fsm.ChangeState(CookState.RunToFireWood);
-                return;
-            }
         }
 
         private void RunToObjContainer_Update()
@@ -177,12 +197,12 @@ namespace TN.Role
             bool isArrive = transform.MoveToUpdate(findFoodContainer.transform.position, MoveSpeed);
             if (isArrive)
             {
-                if (_curMenu.SourceMaterialInfos == null)
+                if (_curOrder.MenuInfo.SourceMaterialInfos == null)
                 {
-                    if (findFoodContainer.CanPickFood(_curMenu.TargetId))
+                    if (findFoodContainer.CanPickFood(_curOrder.MenuInfo.TargetId))
                     {
-                        TakeObj(_curMenu.TargetId, 1);
-                        findFoodContainer.RemoveFood(_curMenu.TargetId);
+                        TakeObj(_curOrder.MenuInfo.TargetId, 1);
+                        findFoodContainer.RemoveFood(_curOrder.MenuInfo.TargetId);
                         _fsm.ChangeState(CookState.RunToFoodAllot);
                         return;
                     }
@@ -264,7 +284,7 @@ namespace TN.Role
                     return;
                 }
 
-                if (_curMenu == null)
+                if (_curOrder == null)
                 {
                     _fsm.ChangeState(CookState.None);
                     return;
@@ -290,8 +310,8 @@ namespace TN.Role
         {
             _cookingDis = new CompositeDisposable();
             _needCook = true;
-            CookingObjId = _curMenu.TargetId;
-            Observable.Timer(TimeSpan.FromSeconds(_curMenu.Duration))
+            CookingObjId = _curOrder.MenuInfo.TargetId;
+            Observable.Timer(TimeSpan.FromSeconds(_curOrder.MenuInfo.Duration))
                       .Subscribe(l =>
                       {
                           _needCook = false;
@@ -355,7 +375,6 @@ namespace TN.Role
 
         private void RunToFoodAllot_Enter()
         {
-            _curMenu = null;
         }
 
         private void RunToFoodAllot_Update()
@@ -364,6 +383,9 @@ namespace TN.Role
             if (isArrive)
             {
                 //到达分配桌附近
+                GameManager.Instance.FoodAllot.EnqueueOrder(_curOrder);
+                _curOrder = null;
+
                 ReleaseObj();
                 _fsm.ChangeState(CookState.RunToCookingBench);
             }

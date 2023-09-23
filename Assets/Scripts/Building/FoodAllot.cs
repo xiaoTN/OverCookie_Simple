@@ -1,4 +1,8 @@
 using System;
+using System.Collections.Generic;
+using System.Text;
+using Sirenix.OdinInspector;
+using TN.Info;
 using UnityEngine;
 using VirtualStage.Core;
 
@@ -13,8 +17,22 @@ namespace TN.Building
         {
             get
             {
-                return $@"";
+                StringBuilder s = new StringBuilder();
+                foreach (OrderInfo orderInfo in _orderQueue)
+                {
+                    s.AppendLine(orderInfo.ToString());
+                }
+
+                return $@"{s}";
             }
+        }
+
+        [ShowInInspector]
+        [ReadOnly]
+        private Queue<OrderInfo> _orderQueue = new Queue<OrderInfo>();
+        public void EnqueueOrder(OrderInfo curOrder)
+        {
+            _orderQueue.Enqueue(curOrder);
         }
     }
 }

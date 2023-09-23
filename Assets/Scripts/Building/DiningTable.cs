@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using TN.Role;
 using UnityEngine;
 
 namespace TN.Building
@@ -9,6 +11,16 @@ namespace TN.Building
             get
             {
                 return "";
+            }
+        }
+
+        public List<Customer> Customers;
+
+        public void Init()
+        {
+            foreach (Customer customer in Customers)
+            {
+                customer.Init(this);
             }
         }
     }

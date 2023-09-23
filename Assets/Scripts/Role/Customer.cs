@@ -1,5 +1,6 @@
 using System;
 using Sirenix.OdinInspector;
+using TN.Building;
 using TN.Info;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -24,5 +25,11 @@ namespace TN.Role
         public float HungerTime;
 
         protected override string GizmoLabel { get; }
+        [NonSerialized]
+        public DiningTable DiningTable;
+        public void Init(DiningTable diningTable)
+        {
+            DiningTable = diningTable;
+        }
     }
 }
