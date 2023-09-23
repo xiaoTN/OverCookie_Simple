@@ -20,6 +20,10 @@ namespace TN.Info
 
         public override string ToString()
         {
+            if (Customer == null)
+            {
+                return String.Empty;
+            }
             return $"{MenuInfo.TargetId.ToString()}[1个]->{Customer.Name}";
         }
     }

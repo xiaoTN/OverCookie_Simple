@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Text;
 using TN.Info;
 using TN.Role;
 using UnityEngine;
@@ -12,26 +13,32 @@ namespace TN.Building
         {
             get
             {
+                StringBuilder s = new StringBuilder();
+                
                 return "";
             }
         }
 
         public List<Customer>  Customers;
         [NonSerialized]
-        public List<OrderInfo> OrderInfos;
+        public List<OrderInfo> OrderInfos=new List<OrderInfo>();
         public void Init()
         {
             foreach (Customer customer in Customers)
             {
                 customer.Init(this);
             }
-
-            OrderInfos ??= new List<OrderInfo>();
         }
 
         public void AddOrderInfo(OrderInfo orderInfo)
         {
             OrderInfos.Add(orderInfo);
+            Customer findCustom = Customers.Find(customer => customer.WantOrderInfo == orderInfo);
+            if (findCustom == null)
+            {LogError($"找不到顾客：{orderInfo}");
+                return;
+            }
+            findCustom.Eat();
         }
 
         public void RemoveOrderInfo(OrderInfo orderInfo)

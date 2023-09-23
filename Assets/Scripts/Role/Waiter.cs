@@ -90,7 +90,7 @@ namespace TN.Role
         {
             if (transform.MoveToUpdate(_targetDinningTable.transform.position, MoveSpeed))
             {
-                Log("卸下身上的物品");
+                Log($"卸下身上的物品：{_curTakeOrderInfo}");
                 _targetDinningTable.AddOrderInfo(_curTakeOrderInfo);
                 ReleaseObj();
                 _targetDinningTable = null;

@@ -36,15 +36,17 @@ namespace TN.Info
         /// <summary>
         /// 添加预定
         /// </summary>
-        public void AddOrder(Customer customer, MenuInfo menuInfo)
+        public OrderInfo AddOrder(Customer customer, MenuInfo menuInfo)
         {
-            _orderFormMenuQueue.Enqueue(new OrderInfo(menuInfo, customer));
+            OrderInfo orderInfo = new OrderInfo(menuInfo, customer);
+            _orderFormMenuQueue.Enqueue(orderInfo);
+            return orderInfo;
         }
 
-        public void AddOrder(Customer customer, ObjType objType)
+        public OrderInfo AddOrder(Customer customer, ObjType objType)
         {
             MenuInfo findMenu = MenuInfos.Find(info => info.TargetId == objType);
-            AddOrder(customer, findMenu);
+            return AddOrder(customer, findMenu);
         }
 
         /// <summary>
