@@ -14,8 +14,7 @@ namespace TN.Building
         {
             get
             {
-                return $@"【柴火箱】
-数量：{MaxCount}";
+                return $@"数量：{MaxCount}";
             }
         }
 

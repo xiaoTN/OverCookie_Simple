@@ -369,6 +369,7 @@ namespace TN.Role
             }
         }
 
+
         protected override string GizmoLabel
         {
             get
@@ -382,8 +383,7 @@ namespace TN.Role
                     }
                 }
 
-                return $@"厨师：
-携带的物品：{s.ToString()}
+                return $@"携带的物品：{s.ToString()}
 正在烹饪的物品：{CookingObjId.ToString()}";
             }
         }

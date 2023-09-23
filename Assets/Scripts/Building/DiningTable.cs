@@ -8,7 +8,7 @@ namespace TN.Building
         {
             get
             {
-                return "餐桌";
+                return "";
             }
         }
     }

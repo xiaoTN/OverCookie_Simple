@@ -482,6 +482,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d7dd7c9a7694de4983fc2010881d551, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _gizmoName: 
 --- !u!23 &974268706
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -628,6 +629,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b51f75356eda4765ba233f3c5f6c76b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _gizmoName: "\u7076\u53F0"
   CookingFoodId: 0
   RemainFireWood: 0
 --- !u!1 &1177983024
@@ -726,6 +728,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 028a3193b02e4a1fa36f4788c0fde133, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _gizmoName: "\u67F4\u706B\u7BB1"
   MaxCount: 1000
 --- !u!1 &1337607996
 GameObject:
@@ -773,6 +776,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 461c1b764b8c4d3682e3268ed683dd06, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _gizmoName: "\u98DF\u7269\u5206\u914D\u684C"
 --- !u!23 &1337607999
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -919,6 +923,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a5b9c389c99c4e1eb0239169238f3463, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _gizmoName: "\u98DF\u7269\u7BB1"
   ContainerInfos:
   - ObjId: 3
     Count: 10
@@ -1004,7 +1009,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d9d4f30035294ad385cc9d3bf7b0e9db, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TakeObjIds: 
+  _gizmoName: "\u53A8\u5E08"
   MaxTakeCount: 2
   MoveSpeed: 5
   CookingObjId: 0

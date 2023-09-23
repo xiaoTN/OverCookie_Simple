@@ -35,8 +35,7 @@ namespace TN.Building
                     s.AppendLine($"{containerInfo.ObjId.ToString()}:{containerInfo.Count}");
                 }
 
-                return $@"食物箱:
-{s.ToString()}";
+                return $@"{s.ToString()}";
             }
         }
 

@@ -13,7 +13,7 @@ namespace TN.Building
         {
             get
             {
-                return $@"食物分配桌";
+                return $@"";
             }
         }
     }

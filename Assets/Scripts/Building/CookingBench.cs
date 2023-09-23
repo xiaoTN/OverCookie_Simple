@@ -23,8 +23,7 @@ namespace TN.Building
 
         protected override string GizmoLabel
         {
-            get { return $@"【灶台】
-柴火数：{RemainFireWood}
+            get { return $@"柴火数：{RemainFireWood}
 正在烹饪的食物：{CookingFoodId.ToString()}"; }
         }
 
