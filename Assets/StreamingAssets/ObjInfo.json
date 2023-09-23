@@ -15,6 +15,11 @@
     "MaxCountPerGrid": 1
   },
   {
+    "Id": "意面",
+    "Name": "意面",
+    "MaxCountPerGrid": 1
+  },
+  {
     "Id": "曲奇",
     "Name": "曲奇",
     "MaxCountPerGrid": 1

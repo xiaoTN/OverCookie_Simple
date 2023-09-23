@@ -9,19 +9,14 @@ namespace TN.Info
     {
         None,
 
-        [LabelText("柴火")]
         柴火,
 
-        [LabelText("牛排")]
         牛排,
 
-        [LabelText("生牛肉")]
         生牛排,
 
-        [LabelText("意大利牛排套餐")]
         意大利牛排套餐,
-
-        [LabelText("曲奇饼")]
         曲奇,
+        意面,
     }
 }

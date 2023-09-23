@@ -2462,7 +2462,7 @@ MonoBehaviour:
   ContainerInfos:
   - ObjId: 3
     Count: 10
-  - ObjId: 4
+  - ObjId: 6
     Count: 10
   - ObjId: 5
     Count: 10
